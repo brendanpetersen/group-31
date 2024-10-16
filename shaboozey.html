@@ -7,6 +7,7 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
 
 <!-- Navagation Bar -->
 
@@ -43,7 +44,7 @@
 
 <!-- Event Details -->
 
-<div class="p-3 bg-primary bg-opacity-50 border border-priamry border-start-0 rounded-end"><h2>Shaboozey</h2>
+<div class="p-3 bg-primary bg-opacity-75 border border-priamry border-start-0 rounded-end"><h2>Shaboozey</h2>
 </div> 
 </p>
 <div class="container"
@@ -79,8 +80,7 @@
 <hr class="my-4">
 <h4 class="mb-3">Tickets</h4>
 <div class="col-md-5">
-  <label for="tickets" class="form-label">Tickets</label>
-  <select class="form-select" id="tickets" required="">
+  <select class="form-select">
     <option value="">Choose...</option>
     <option>1</option>
     <option>2</option>
@@ -93,14 +93,20 @@
     <option>9</option>
   </select>
   <p></p>
-  <a href="bookings.html" type="button" class="w-100 btn btn-primary btn-lg" type="submit">Buy Tickets</a>
-  <div class="invalid-feedback">
-    Please select amount of tickets.
+  <a href="bookings.html" type="button" class="w-100 btn btn-primary btn-md">Buy Tickets</a>
   </div>
 </div>
-</form>
-</div>
-</div>
+
+<!-- Comments -->
+
+<hr class="my-4">
+<h4 class="mb-3">Comments</h4>
+<div class="col-md-5">
+  <div class="mb-3">
+    <textarea class="form-control border-black" rows="3"></textarea>
+    </div>
+  <a href="fred-again.html" type="button" class="w-100 btn btn-primary btn-md" type="submit">Post Comment</a>
+  </div>
 </div>
 
 <!-- Footer -->
