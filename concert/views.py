@@ -15,6 +15,22 @@ def login():
 def index():
     return render_template('index.html')
 
+@mainbp.route('/fred-again', methods = ['GET', 'POST'])
+def fred_again():
+    return render_template('fred-again.html')
+
+@mainbp.route('/sabrina-carpenter', methods = ['GET', 'POST'])
+def sabrina_carpenter():
+    return render_template('sabrina-carpenter.html')
+
+@mainbp.route('/shaboozey', methods = ['GET', 'POST'])
+def shaboozey():
+    return render_template('shaboozey.html')
+
+@mainbp.route('/them-dirty-roses', methods = ['GET', 'POST'])
+def them_dirty_roses():
+    return render_template('them-dirty-roses.html')
+
 @mainbp.route('/bookings', methods = ['GET', 'POST'])
 def bookings():
     return render_template('bookings.html')
