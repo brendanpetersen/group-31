@@ -1,6 +1,9 @@
 import os
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 def create_app(template_folder='templates'):
     template_folder_path = os.path.join(os.path.dirname(__file__), '..', 'templates')
@@ -18,6 +21,9 @@ def create_app(template_folder='templates'):
     Bootstrap5(app)
 
     app.secret_key = 'pecanpie'
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///traveldb.sqlite'
+    db.init_app(app)
 
     @app.errorhandler(404) 
     # inbuilt function which takes error as parameter 
