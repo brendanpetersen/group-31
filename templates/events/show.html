@@ -9,7 +9,7 @@
 
 <!-- Event Details Header -->
 <div class="p-3 bg-primary bg-opacity-75 border border-primary border-start-0 rounded-end">
-  <h2 class="ms-5">{{concert.name}}</h2>
+  <h2 class="ms-5">{{ concert.name }}</h2>
 </div>
 
 <div class="container ms-5">
@@ -19,18 +19,18 @@
               <div class="row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                       <div class="card">
-                          <img class="card-img-top" src="{{concert.image}}" alt="Concert Image">
+                          <img class="card-img-top" src="{{ concert.image }}" alt="Concert Image">
                       </div>
                   </div>
                   <div class="col-sm-6">
                       <div class="card">
                           <div class="card-body">
-                              <p class="card-text"><strong>Title:</strong> {{concert.name}}</p>
-                              <p class="card-text"><strong>Description:</strong> {{concert.description}}</p>
-                              <p class="card-text"><strong>Venue:</strong> {{concert.venue}}</p>
-                              <p class="card-text"><strong>Date:</strong> {{concert.date}}</p>
-                              <p class="card-text"><strong>Time:</strong> {{concert.time}}</p>
-                              <p class="card-text"><strong>Price:</strong> {{concert.price}}</p>
+                              <p class="card-text"><strong>Title:</strong> {{ concert.name }}</p>
+                              <p class="card-text"><strong>Description:</strong> {{ concert.description }}</p>
+                              <p class="card-text"><strong>Venue:</strong> {{ concert.venue }}</p>
+                              <p class="card-text"><strong>Date:</strong> {{ concert.date }}</p>
+                              <p class="card-text"><strong>Time:</strong> {{ concert.time }}</p>
+                              <p class="card-text"><strong>Price:</strong> {{ concert.price }}</p>
                           </div>
                       </div>
                   </div>
@@ -39,30 +39,25 @@
               <!-- Purchase Tickets -->
               <hr class="my-4">
               <h4 class="mb-3">Tickets</h4>
-              <div class="col-md-5">
-                  <select class="form-select">
-                      <option value="">Choose...</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
-                  </select>
-                  <p></p>
-                  <a href="bookings.html" class="w-100 btn btn-primary btn-md">Buy Tickets</a>
-              </div>
+              <form method="POST" action="{{ url_for('main.book_tickets', id=concert.id) }}">
+                <div class="col-md-5">
+                    <select name="num_guests" class="form-select" required>
+                        <option value="">Choose...</option>
+                        {% for i in range(1, 10) %}
+                        <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="w-100 btn btn-primary btn-md">Buy Tickets</button>
+                </div>
+              </form>
 
               <!-- Comments -->
               <hr class="my-4">
               <h4 class="mb-3">Comments</h4>
               {% for comment in concert.comments %}
                 <div class="col-md-12">  
-                  <b>{{comment.user}} <span class="ml-2 text-muted">{{comment.created_at}}</span></b>
-                  <p>{{comment.text}}</p>  
+                  <b>{{ comment.user.name }} <span class="ml-2 text-muted">{{ comment.created_at }}</span></b>
+                  <p>{{ comment.text }}</p>  
                 </div> 
               {% endfor %} 
 

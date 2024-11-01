@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .models import Concert, Comment
+from .models import Concert, Comment, Booking 
 from .forms import ConcertForm, CommentForm
 from werkzeug.utils import secure_filename
 import os
 from . import db
+from flask_login import login_required, current_user
 
-#create blueprint for created events
 eventbp = Blueprint('upcoming', __name__, url_prefix='/events')
 
 UPLOAD_FOLDER = 'templates/img'
@@ -29,7 +29,7 @@ def show(id):
 def comment(id):
     form = CommentForm()
     if form.validate_on_submit():
-        user_id = 1 
+        user_id = 1
         new_comment = Comment(
             text=form.text.data,
             user_id=user_id,
@@ -39,10 +39,10 @@ def comment(id):
         db.session.commit()
         flash('Your comment has been added', 'success')
         return redirect(url_for('upcoming.show', id=id))
-    else:
-        print(form.errors)
+    
     flash('Failed to post comment. Please try again.', 'danger')
     return redirect(url_for('upcoming.show', id=id))
+
 @eventbp.route('/create', methods=['GET', 'POST'])
 def create():
     form = ConcertForm()
@@ -54,7 +54,6 @@ def create():
             upload_path = os.path.join(UPLOAD_FOLDER, filename)
             image_file.save(upload_path)
             
-            # Create a new Concert instance
             concert = Concert(
                 name=form.name.data,
                 description=form.description.data,
@@ -65,16 +64,41 @@ def create():
                 image=upload_path
             )
             
-            # Add the concert to the session and commit
             db.session.add(concert)
             db.session.commit()
             
             flash('Event created successfully!', 'success')
-            return redirect(url_for('upcoming.show', id=concert.id))  # Redirect to the new concert's page
+            return redirect(url_for('upcoming.show', id=concert.id)) 
         else:
             flash('Invalid file type. Please upload an image.', 'danger')
 
     return render_template('events/create.html', form=form)
+
+@eventbp.route('/<id>/book', methods=['POST'])
+@login_required
+def book_tickets(id):
+    concert = db.session.get(Concert, id)
+    if concert is None:
+        flash('Concert not found', 'danger')
+        return redirect(url_for('main.index'))
+    
+    num_guests = request.form.get('num_guests', type=int)
+    if current_user.is_authenticated:
+        booking = Booking(
+            date=concert.date,
+            time=concert.time,
+            event_title=concert.name,
+            user=current_user, 
+            price=concert.price,
+            num_guests=num_guests
+        )
+        db.session.add(booking)
+        db.session.commit()
+        flash('Tickets purchased successfully!', 'success')
+        return redirect(url_for('main.bookings'))
+    else:
+        flash('You need to be logged in to book tickets.', 'danger')
+        return redirect(url_for('auth.login'))
 
 def get_concert(id):
     if id == 1:

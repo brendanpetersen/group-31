@@ -6,7 +6,23 @@
 {% block content %}
 <!-- Bookings Header -->
 <div class="p-3 bg-primary bg-opacity-75 border border-primary border-start-0 rounded-end">
-    <h2 class="ms-5">Bookings</h2>
+    <h2 class="ms-5">Your Bookings</h2>
+</div>
+
+<div class="container">
+    <div class="card-group">
+        {% for booking in bookings %}
+        <div class="card border mx-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ booking.event_title }}</h5>
+                <p>Date: {{ booking.date }}</p>
+                <p>Time: {{ booking.time }}</p>
+                <p>Number of Guests: {{ booking.num_guests }}</p>
+                <p>Total Price: {{ booking.price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 

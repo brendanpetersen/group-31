@@ -1,16 +1,13 @@
-from datetime import datetime
-from .user import User
+from flask import Blueprint, render_template
+from flask_login import login_required, current_user
+from .models import Booking 
+from . import db
 
-class Booking:
-    #Define Booking information
-    def __init__(self, date, time, title, user, price):
-        self.date = date
-        self.time = time
-        self.event = title
-        self.user = user
-        self.price = price
-        self.num_guests = 1
-    #Define info represented when called
-    def __repr__(self):
-        str = f"User: {self.user}\nEvent: {self.event}\nDate: {self.date}\nTime: {self.time}\nPrice: {self.price}\nNumber of Guests: {self.num_guests}"
-        return str
+# Create the bookings blueprint
+mainbp = Blueprint('main', __name__)
+
+@mainbp.route('/bookings', methods=['GET'])
+@login_required
+def bookings():
+    user_bookings = Booking.query.filter_by(user_id=current_user.id).all()
+    return render_template('bookings.html', bookings=user_bookings)

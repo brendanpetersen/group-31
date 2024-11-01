@@ -46,7 +46,7 @@ def login():
             flash(error)
     return render_template('user.html', form=login_form, heading='Login')
 
-@authbp.route('/logout')
+@authbp.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()

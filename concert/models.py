@@ -22,7 +22,7 @@ class Concert(db.Model):
     venue = db.Column(db.String(200))
     date = db.Column(db.String(15))
     time = db.Column(db.String(15))
-    price = db.Column(db.Float)  # Change from String to Float
+    price = db.Column(db.Float)
     comments = db.relationship('Comment', backref='concert', lazy=True)
 
     def __repr__(self):
@@ -38,3 +38,20 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f"Comment(id={self.id}, text={self.text})"
+
+class Booking(db.Model):
+    __tablename__ = 'bookings'
+    id = db.Column(db.Integer, primary_key=True)
+    concert_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    date = db.Column(db.String(15), nullable=False)
+    time = db.Column(db.String(15), nullable=False)
+    event_title = db.Column(db.String(80), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    num_guests = db.Column(db.Integer, default=1)
+
+    user = db.relationship('User', backref='bookings')
+    concert = db.relationship('Concert', backref='bookings')
+
+    def __repr__(self):
+        return f"<Booking {self.event_title} on {self.date} at {self.time}>"
