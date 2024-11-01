@@ -3,6 +3,7 @@ from .models import Concert, Comment
 from .forms import ConcertForm, CommentForm
 from werkzeug.utils import secure_filename
 import os
+from . import db
 
 #create blueprint for created events
 eventbp = Blueprint('upcoming', __name__, url_prefix='/events')
@@ -15,12 +16,9 @@ def allowed_file(filename):
 
 @eventbp.route('/<id>')
 def show(id):
-    concert = get_concert(int(id))
-    if concert is None:
-        flash('Concert not found.', 'danger')
-        return redirect(url_for('upcoming.index'))
+    concert_instance = db.session.scalar(db.select(Concert).where(Concert.id==id))
     cform = CommentForm()
-    return render_template('events/show.html', concert=concert, cform=cform)
+    return render_template('events/show.html', concert=concert_instance, cform=cform)
 
 @eventbp.route('/<id>/comment', methods=['POST'])
 def comment(id):
@@ -48,6 +46,7 @@ def create():
             upload_path = os.path.join(UPLOAD_FOLDER, filename)
             image_file.save(upload_path)
             
+            # Create a new Concert instance
             concert = Concert(
                 name=form.name.data,
                 description=form.description.data,
@@ -58,8 +57,12 @@ def create():
                 image=upload_path
             )
             
+            # Add the concert to the session and commit
+            db.session.add(concert)
+            db.session.commit()
+            
             flash('Event created successfully!', 'success')
-            return redirect(url_for('upcoming.show', id=1))
+            return redirect(url_for('upcoming.show', id=concert.id))  # Redirect to the new concert's page
         else:
             flash('Invalid file type. Please upload an image.', 'danger')
 
