@@ -12,6 +12,9 @@ def create_app(template_folder='templates'):
     from . import upcoming_concerts
     app.register_blueprint(upcoming_concerts.eventbp)
 
+    from . import auth
+    app.register_blueprint(auth.authbp)
+
     Bootstrap5(app)
 
     app.secret_key = 'pecanpie'
