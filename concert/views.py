@@ -1,10 +1,14 @@
 from flask import Blueprint, render_template
+from .models import Concert
+from . import db
+
 
 mainbp = Blueprint('main', __name__)
 
-@mainbp.route('/', methods = ['GET', 'POST'])
+@mainbp.route('/')
 def index():
-    return render_template('index.html')
+    home = db.session.scalars(db.select(Concert)).all()    
+    return render_template('index.html', concert=home)
 
 @mainbp.route('/bookings', methods = ['GET', 'POST'])
 def bookings():
