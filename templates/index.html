@@ -54,38 +54,16 @@
         <h2 class="mb-3">Events</h2>
     </div>
     <div class="card-group" style="padding-left: 15px; padding-right: 15px;">
+        {% for concert in concert %}
         <div class="card border mx-3">
-            <img class="card-img-top" src="img/fred-again.webp">
+            <img class="card-img-top" src="{{ concert.image }}" alt="{{ concert.name }}">
             <div class="card-body">
-                <h5 class="card-title">Fred Again</h5>
-                <a href="events/fred-again.html" class="btn btn-primary stretched-link">See more</a>
+                <h5 class="card-title">{{ concert.name }}</h5>
+                <a href="{{ url_for('upcoming.show', id=concert.id) }}" class="btn btn-primary stretched-link">See more</a>
             </div>
             <div class="card-footer"><small class="text-muted">Event Open</small></div>
         </div>
-        <div class="card border mx-3">
-            <img class="card-img-top" src="img/sabrina-carpenter.webp">
-            <div class="card-body">
-                <h5 class="card-title">Sabrina Carpenter</h5>
-                <a href="events/sabrina-carpenter.html" class="btn btn-primary stretched-link">See more</a>
-            </div>
-            <div class="card-footer"><small class="text-muted">Event Open</small></div>
-        </div>
-        <div class="card border mx-3">
-            <img class="card-img-top" src="img/shaboozey.webp">
-            <div class="card-body">
-                <h5 class="card-title">Shaboozey</h5>
-                <a href="events/shaboozey.html" class="btn btn-primary stretched-link">See more</a>
-            </div>
-            <div class="card-footer"><small class="text-muted">Event Open</small></div>
-        </div>
-        <div class="card border mx-3">
-            <img class="card-img-top" src="img/them-dirty-roses.webp">
-            <div class="card-body">
-                <h5 class="card-title">Them Dirty Roses</h5>
-                <a href="events/them-dirty-roses.html" class="btn btn-primary stretched-link">See more</a>
-            </div>
-            <div class="card-footer"><small class="text-muted">Event Open</small></div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}
 
