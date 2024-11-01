@@ -33,9 +33,7 @@ class RegisterForm(FlaskForm):
     phone = IntegerField("Phone Number", validators=[InputRequired()])
     address = StringField("Address", validators=[InputRequired()])
 
-    # linking two fields - password should be equal to data entered in confirm
     password = PasswordField("Password", validators=[InputRequired(),
                   EqualTo('confirm', message="Passwords should match")])
     confirm = PasswordField("Confirm Password")
-    # submit button
     submit = SubmitField("Register")
