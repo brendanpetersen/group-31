@@ -3,6 +3,8 @@
 {% block header %}
 {% endblock %}
 
+{% from 'bootstrap5/form.html' import render_form %}
+
 {% block content %}
 
 <!-- Event Details Header -->
@@ -17,7 +19,7 @@
               <div class="row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                       <div class="card">
-                          <img class="card-img-top" src="{{concert.image}}" alt="Fred Again">
+                          <img class="card-img-top" src="{{concert.image}}" alt="Concert Image">
                       </div>
                   </div>
                   <div class="col-sm-6">
@@ -62,13 +64,13 @@
                   <b>{{comment.user}} <span class="ml-2 text-muted">{{comment.created_at}}</span></b>
                   <p>{{comment.text}}</p>  
                 </div> 
-                {% endfor %} 
-              </div>  
+              {% endfor %} 
+
+              <!-- Comment Form -->
               <div class="col-md-5">
-                  <div class="mb-3">
-                      <textarea class="form-control border-black" rows="3"></textarea>
-                  </div>
-                  <a href="fred-again.html" class="w-100 btn btn-primary btn-md">Post Comment</a>
+                <form method="POST" action="{{ url_for('upcoming.comment', id=concert.id) }}">
+                    {{ render_form(cform) }}
+                </form>
               </div>
           </div>
       </div>

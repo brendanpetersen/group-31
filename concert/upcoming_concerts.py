@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Concert, Comment
-from .forms import ConcertForm
+from .forms import ConcertForm, CommentForm
 from werkzeug.utils import secure_filename
 import os
 
@@ -15,8 +15,27 @@ def allowed_file(filename):
 
 @eventbp.route('/<id>')
 def show(id):
-    Concert = get_concert()
-    return render_template('events/show.html', concert=Concert)
+    concert = get_concert(int(id))
+    if concert is None:
+        flash('Concert not found.', 'danger')
+        return redirect(url_for('upcoming.index'))
+    cform = CommentForm()
+    return render_template('events/show.html', concert=concert, cform=cform)
+
+@eventbp.route('/<id>/comment', methods=['POST'])
+def comment(id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        new_comment = Comment(user="Current User", text=form.text.data, created_at='2024-08-12 11:00:00')
+        concert = get_concert(int(id))
+        if concert:
+            concert.set_comments(new_comment)
+            flash('Your comment has been posted!', 'success')
+        else:
+            flash('Concert not found.', 'danger')
+    else:
+        flash('There was an issue posting your comment.', 'danger')
+    return redirect(url_for('upcoming.show', id=id))
 
 @eventbp.route('/create', methods=['GET', 'POST'])
 def create():
@@ -46,19 +65,22 @@ def create():
 
     return render_template('events/create.html', form=form)
 
+def get_concert(id):
+    if id == 1:
+        b_desc = """American musician with a blend of country and hip-hop; 'Start a Riot' was included in Spider-Man: Into the Spider-Verse."""
+        image_loc = 'img/shaboozey.webp'
+        concert = Concert('Shaboozey', b_desc, 'The Triffid, Newstead', '21/11/2024', '20:00', image_loc, '$120')
+        concert.id = id 
 
-def get_concert():
-    b_desc = """American musician with a blend of country and hip-hop; 'Start a Riot' was included in Spider-Man: Into the Spider-Verse."""
-    image_loc = 'img/shaboozey.webp'
-    concert = Concert('Shaboozey', b_desc, 'The Triffid, Newstead', '21/11/2024', '20:00', image_loc, '$120')
-    
-    # Set comments
-    comments = [
-        Comment("Sam", "I've booked already!", '2024-08-12 11:00:00'),
-        Comment("Juliette", "purr slay queen", '2024-08-12 11:00:00'),
-        Comment("Sally", "hurray", '2024-08-12 11:00:00')
-    ]
-    for comment in comments:
-        concert.set_comments(comment)
-    
-    return concert
+        # Set comments
+        comments = [
+            Comment("Sam", "I've booked already!", '2024-08-12 11:00:00'),
+            Comment("Juliette", "purr slay queen", '2024-08-12 11:00:00'),
+            Comment("Sally", "hurray", '2024-08-12 11:00:00')
+        ]
+        for comment in comments:
+            concert.set_comments(comment)
+
+        return concert
+    else:
+        return None
