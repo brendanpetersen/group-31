@@ -7,7 +7,7 @@
 
 <!-- Event Details Header -->
 <div class="p-3 bg-primary bg-opacity-75 border border-primary border-start-0 rounded-end">
-  <h2 class="ms-5">Fred Again</h2>
+  <h2 class="ms-5">{{concert.name}}</h2>
 </div>
 
 <div class="container ms-5">
@@ -17,18 +17,18 @@
               <div class="row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                       <div class="card">
-                          <img class="card-img-top" src="img/fred-again.webp" alt="Fred Again">
+                          <img class="card-img-top" src="{{concert.image}}" alt="Fred Again">
                       </div>
                   </div>
                   <div class="col-sm-6">
                       <div class="card">
                           <div class="card-body">
-                              <p class="card-text"><strong>Title:</strong> Fred Again</p>
-                              <p class="card-text"><strong>Description:</strong> New Electronic DJ from the UK that has burst onto the music scene, with new releases including 'Adore You' and 'Ten'.</p>
-                              <p class="card-text"><strong>Venue:</strong> Fortitude Music Hall, Fortitude Valley</p>
-                              <p class="card-text"><strong>Date:</strong> 15/11/2024</p>
-                              <p class="card-text"><strong>Time:</strong> 19:30</p>
-                              <p class="card-text"><strong>Price:</strong> $90</p>
+                              <p class="card-text"><strong>Title:</strong> {{concert.name}}</p>
+                              <p class="card-text"><strong>Description:</strong> {{concert.description}}</p>
+                              <p class="card-text"><strong>Venue:</strong> {{concert.venue}}</p>
+                              <p class="card-text"><strong>Date:</strong> {{concert.date}}</p>
+                              <p class="card-text"><strong>Time:</strong> {{concert.time}}</p>
+                              <p class="card-text"><strong>Price:</strong> {{concert.price}}</p>
                           </div>
                       </div>
                   </div>
@@ -57,6 +57,13 @@
               <!-- Comments -->
               <hr class="my-4">
               <h4 class="mb-3">Comments</h4>
+              {% for comment in concert.comments %}
+                <div class="col-md-12">  
+                  <b>{{comment.user}} <span class="ml-2 text-muted">January 2024</span></b>
+                  <p>{{comment.text}}</p>  
+                </div> 
+                {% endfor %} 
+              </div>  
               <div class="col-md-5">
                   <div class="mb-3">
                       <textarea class="form-control border-black" rows="3"></textarea>
