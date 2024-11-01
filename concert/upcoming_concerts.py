@@ -16,7 +16,12 @@ def allowed_file(filename):
 
 @eventbp.route('/<id>')
 def show(id):
-    concert_instance = db.session.scalar(db.select(Concert).where(Concert.id==id))
+    concert_instance = db.session.scalar(db.select(Concert).where(Concert.id == id))
+    
+    if concert_instance is None:
+        flash('Concert not found', 'danger')
+        return redirect(url_for('main.index'))
+
     cform = CommentForm()
     return render_template('events/show.html', concert=concert_instance, cform=cform)
 
@@ -24,17 +29,20 @@ def show(id):
 def comment(id):
     form = CommentForm()
     if form.validate_on_submit():
-        new_comment = Comment(user="Current User", text=form.text.data, created_at='2024-08-12 11:00:00')
-        concert = get_concert(int(id))
-        if concert:
-            concert.set_comments(new_comment)
-            flash('Your comment has been posted!', 'success')
-        else:
-            flash('Concert not found.', 'danger')
+        user_id = 1 
+        new_comment = Comment(
+            text=form.text.data,
+            user_id=user_id,
+            concert_id=id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        flash('Your comment has been added', 'success')
+        return redirect(url_for('upcoming.show', id=id))
     else:
-        flash('There was an issue posting your comment.', 'danger')
+        print(form.errors)
+    flash('Failed to post comment. Please try again.', 'danger')
     return redirect(url_for('upcoming.show', id=id))
-
 @eventbp.route('/create', methods=['GET', 'POST'])
 def create():
     form = ConcertForm()
