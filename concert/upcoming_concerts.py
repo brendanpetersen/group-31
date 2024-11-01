@@ -7,41 +7,45 @@ import os
 #create blueprint for created events
 eventbp = Blueprint('upcoming', __name__, url_prefix='/events')
 
+UPLOAD_FOLDER = 'templates/img'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @eventbp.route('/<id>')
 def show(id):
     Concert = get_concert()
     return render_template('events/show.html', concert=Concert)
 
-@eventbp.route('/create', methods = ['GET', 'POST'])
+@eventbp.route('/create', methods=['GET', 'POST'])
 def create():
-  print('Method type: ', request.method)
-  form = ConcertForm()
-  if form.validate_on_submit():
-    print('Successfully created new event')
-    
-    image_file = form.image.data
-    filename = secure_filename(image_file.filename)
-        
-    upload_path = os.path.join('/img', filename)
-        
-    image_file.save(upload_path)
+    form = ConcertForm()
+    if form.validate_on_submit():
+        image_file = form.image.data
 
-    concert = Concert(
-        name=form.name.data,
-        description=form.description.data,
-        venue=form.venue.data,
-        date=form.date.data,
-        time=form.time.data,
-        price=form.price.data,
-        image=upload_path
-        )
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            upload_path = os.path.join(UPLOAD_FOLDER, filename)
+            image_file.save(upload_path)
+            
+            concert = Concert(
+                name=form.name.data,
+                description=form.description.data,
+                venue=form.venue.data,
+                date=form.date.data,
+                time=form.time.data,
+                price=form.price.data,
+                image=upload_path
+            )
+            
+            flash('Event created successfully!', 'success')
+            return redirect(url_for('upcoming.show', id=1))
+        else:
+            flash('Invalid file type. Please upload an image.', 'danger')
 
-    print(concert)
+    return render_template('events/create.html', form=form)
 
-    flash('Event created successfully!', 'success')
-    return redirect(url_for('upcoming.show', id=1))
-
-  return render_template('events/create.html', form=form)
 
 def get_concert():
     b_desc = """American musician with a blend of country and hip-hop; 'Start a Riot' was included in Spider-Man: Into the Spider-Verse."""
