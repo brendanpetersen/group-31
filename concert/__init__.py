@@ -8,6 +8,9 @@ def create_app(template_folder='templates'):
     from . import views
     app.register_blueprint(views.mainbp)
 
+    from . import upcoming_concerts
+    app.register_blueprint(upcoming_concerts.eventbp)
+
     app.secret_key = 'pecanpie'
 
     @app.errorhandler(404) 
