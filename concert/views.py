@@ -19,10 +19,6 @@ def index():
 def bookings():
     return render_template('bookings.html')
 
-@mainbp.route('/create', methods = ['GET', 'POST'])
-def create_event():
-    return render_template('create-event.html')
-
 @mainbp.route('/register', methods = ['GET', 'POST'])
 def register():
     email = request.values.get("email")

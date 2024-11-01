@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+
+<div class="p-3 bg-primary bg-opacity-75 border border-primary border-start-0 rounded-end">
+    <h1 class="ms-5">Create Event</h1>
+</div>
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>Fill out the form below to tell the world what's going down:</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% for field in form %}
+                    {% if field.name != 'submit' and field.name != 'cancel' %}
+                        <div class="mb-3">
+                            {{ field.label(class="form-label") }}
+                            {{ field(class="form-control") }}
+                            {% for error in field.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+                    <a href="{{ url_for('main.index') }}" class="w-50 btn btn-secondary btn-md">Cancel</a>
+                    <button type="submit" class="w-50 btn btn-primary btn-md">{{ form.submit.label }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

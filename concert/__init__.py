@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap5
 
 def create_app(template_folder='templates'):
     template_folder_path = os.path.join(os.path.dirname(__file__), '..', 'templates')
@@ -10,6 +11,8 @@ def create_app(template_folder='templates'):
 
     from . import upcoming_concerts
     app.register_blueprint(upcoming_concerts.eventbp)
+
+    Bootstrap5(app)
 
     app.secret_key = 'pecanpie'
 
