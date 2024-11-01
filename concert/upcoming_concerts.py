@@ -6,6 +6,7 @@ eventbp = Blueprint('upcoming', __name__, url_prefix='/events')
 
 @eventbp.route('/<id>')
 def show(id):
+    Concert = get_concert()
     return render_template('events/show.html', concert=Concert)
 
 def get_concert():
