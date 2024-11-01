@@ -21,7 +21,7 @@ class Concert(db.Model):
     venue = db.Column(db.String(200))
     date = db.Column(db.String(15))
     time = db.Column(db.String(15))
-    price = db.Column(db.String(15))
+    price = db.Column(db.Float)  # Change from String to Float
     comments = db.relationship('Comment', backref='concert', lazy=True)
 
     def __repr__(self):
